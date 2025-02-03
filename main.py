@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import ttk
 
 # Function to update the text on the screen
 def on_button_click(value):
@@ -9,7 +10,7 @@ def on_button_click(value):
 # Function to calculate the result
 def calculate():
     try:
-        result = eval(entry.get())  # Execute the mathematical expression
+        result = eval(entry.get())  # Evaluate the mathematical expression
         entry.delete(0, tk.END)
         entry.insert(0, str(result))
     except Exception as e:
@@ -24,9 +25,37 @@ def clear():
 root = tk.Tk()
 root.title("Calculator")
 
+# Style for widgets
+style = ttk.Style()
+style.configure("TButton",
+                font=("Arial", 18),
+                padding=10,
+                width=5,
+                relief="flat",  # Flat buttons
+                borderwidth=5)  # Button border thickness
+
+# Style for the input field (Entry)
+style.configure("TEntry",
+                font=("Arial", 24),
+                padding=10,
+                relief="flat",
+                background="#f0f0f0",  # Light background
+                foreground="black",  # Black text color
+                borderwidth=5)
+
+# Style for the "=" button
+style.configure("Equal.TButton",
+                font=("Arial", 18),
+                padding=10,
+                width=5,
+                relief="flat",
+                background="#2196F3",  # Blue background color
+                foreground="white",
+                borderwidth=5)
+
 # Input screen
-entry = tk.Entry(root, width=20, font=("Arial", 24), borderwidth=2, relief="solid")
-entry.grid(row=0, column=0, columnspan=4)
+entry = ttk.Entry(root, width=20, style="TEntry", justify="right")
+entry.grid(row=0, column=0, columnspan=4, padx=10, pady=10)
 
 # Calculator buttons
 buttons = [
@@ -40,12 +69,17 @@ buttons = [
 # Create buttons
 for (text, row, col) in buttons:
     if text == "=":
-        button = tk.Button(root, text=text, width=5, height=2, font=("Arial", 18), command=calculate)
+        button = ttk.Button(root, text=text, command=calculate, style="Equal.TButton")
     elif text == "C":
-        button = tk.Button(root, text=text, width=5, height=2, font=("Arial", 18), command=clear)
+        button = ttk.Button(root, text=text, command=clear)
     else:
-        button = tk.Button(root, text=text, width=5, height=2, font=("Arial", 18), command=lambda value=text: on_button_click(value))
-    button.grid(row=row, column=col)
+        button = ttk.Button(root, text=text, command=lambda value=text: on_button_click(value))
+    
+    # Set styles for buttons
+    button.grid(row=row, column=col, padx=5, pady=5)
+
+# Set the background color of the window
+root.configure(bg="#e3e3e3")
 
 # Start the main loop
 root.mainloop()
